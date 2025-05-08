@@ -118,37 +118,72 @@ def dibujar_tablero_con_barcos(tablero_barcos, barcos):
     return tablero_barcos
 
 '''
+########## NO NOS HACE FALTA ESTA FUNCIÓN ##############
 def disparar(casilla,tablero):
     if tablero[casilla] in ('O', 'X'):
         tablero[casilla] = "X"
     elif tablero[casilla] in ("_", 'A'):
         tablero[casilla] = "A"
     return tablero
+########## NO NOS HACE FALTA ESTA FUNCIÓN ##############
 '''
+def actualizar_impactos(disparo, barcos_jugador, barcos_impactados):
+    #disparo es un array de [x,y], barcos es un array de [[[x,y],[w,z]],...]
+    for i, barco in enumerate(barcos_jugador): # para cada barco del jugador
+        if disparo in barco: # si las coordenadas del disparo coinciden
+            if disparo not in barcos_impactados[i]: # si no está en barcos_impactados
+                barcos_impactados[i].append(disparo) # añade las coordenadas a barcos_impactados
+            break
+    return barcos_impactados
 
-def disparar(tablero):
+def comprobar_hundido_y_ganador(barcos_jugador, barcos_impactados):
+    todos_hundidos = True
+    for i in range(len(barcos_jugador)): # para cada barco del jugador
+        if len(barcos_jugador[i]) == len(barcos_impactados[i]): # comprobar si coincide con los impactados
+            print("💥💥Hundido!💥💥") # si hay alguno
+        else:
+            todos_hundidos = False # si algún barco no está en barcos_impactados, 
+    return todos_hundidos
+
+def disparar(
+        barcos_jugador,
+        barcos_impactados, 
+        tablero_barcos_rival, 
+        tablero_disparos_jugador):
     '''
-    función que recibe el tablero de un jugador,
-    pide una casilla (coordenadas x, y) y actualiza el tablero según el disparo.
+    función que recibe Tablero Barcos Rival y Tablero Disparos Jugador,
+    pide las coordenadas a las que disparar y actualiza los tableros según el disparo.
+    actualiza también si los barcos se están hundiendo
     '''
+    
     while True:
         try:
+            # Pido las coordenadas a las que disparar
             fila = int(input("Introduce la fila: "))
             columna = int(input("Introduce la columna: "))
             
-            # Compruebo que están dentro del rango del tablero
-            if 0 <= fila < len(tablero) and 0 <= columna < len(tablero[0]):
+            # Compruebo que están dentro del tablero
+            if 0 <= fila < len(tablero_barcos_rival) and 0 <= columna < len(tablero_barcos_rival[0]):
                 break
             else:
                 print("Las coordenadas deben estar entre 0 y 9.")
         except ValueError:
             print("Introduce un número válido.")
 
-    coordenadas = tablero[fila][columna]
-
-    if coordenadas in ('O', 'X'):
-        tablero[fila][columna] = "X"  # Tocado o ya disparado
-    elif coordenadas in ("_", 'A'):
-        tablero[fila][columna] = "A"  # Agua o ya fallado
+    disparo = [fila, columna]
+    coordenadas = tablero_barcos_rival[fila][columna]
     
-    return tablero
+    # Actualizo los tableros de disparos del jugador y de barcos del rival
+    if coordenadas in ('O', 'X'):
+        tablero_barcos_rival[fila][columna] = "X"  # Tocado o ya disparado
+        tablero_disparos_jugador[fila][columna] = "X"
+        tocado = True
+        # actualizar barcos_impactados
+        barcos_impactados = actualizar_impactos(disparo, barcos_jugador, barcos_impactados)
+        comprobar_hundido_y_ganador(barcos_jugador, barcos_impactados)
+    elif coordenadas in ("_", 'A'):
+        tablero_barcos_rival[fila][columna] = "A"  # Agua o ya fallado
+        tablero_disparos_jugador[fila][columna] = "A"
+        tocado = False
+        
+    return tocado, barcos_impactados

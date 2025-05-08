@@ -1,4 +1,5 @@
 #barco_rival = [[[0,3], [0,4], [0,5], [0,6]], [[4,7], [5,7], [6,7]], [[8,8], [8,9]], [[7,1],[7,2]]]
 #barco_jugador = [[(0,1), (1,1)], [(1,3), (1,4), (1,5), (1,6)]]
 
-barcos_eslora = ((3,2),(2,3),(1,4)) # (nº de barcos, longitud del barco)
+# nº barcos original >>>>>>>>>>>> barcos_eslora = ((3,2),(2,3),(1,4)) # (nº de barcos, longitud del barco)
+barcos_eslora = ((2,2),(0,3),(0,4)) # (nº de barcos, longitud del barco)
