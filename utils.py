@@ -1,17 +1,34 @@
 import numpy as np
 import variables as vr
+import random
+import time
+import os
+import sys
 
+def limpiar_pantalla():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def pensando(segundos):
+    print("...", end='', flush=True)
+    time.sleep(segundos/3)
+    print(".", end='', flush=True)
+    time.sleep(segundos/3)
+    print(".")
+    time.sleep(segundos/3)
+
+def dibujar():
+    print("\033[30m■■■■■■■■■■■\033[0m") # negro
+    print("\033[31m■■■■■■■■■■■\033[0m") # rojo
+    print("\033[32m■■■■■■■■■■■\033[0m") # verde
+    print("\033[33m■■■■■■■■■■■\033[0m") # amarillo
+    print("\033[34m■■■■■■■■■■■\033[0m") # azul
+    print("\033[35m■■■■■■■■■■■\033[0m") # magenta
+    print("\033[36m■■■■■■■■■■■\033[0m") # cian
+    print("\033[37m■■■■■■■■■■■\033[0m") # blanco
+       
 def crear_tablero(x = 10):
     tablero = np.full((x, x), "_")
     return tablero
-
-'''
-########## NO NOS HACE FALTA ESTA FUNCIÓN ##############
-def crear_barco(eslora):
-    barco = np.full(eslora, "O")
-    return (barco)
-########## NO NOS HACE FALTA ESTA FUNCIÓN ##############
-'''
 
 def validar_casilla_inicial(casilla, eslora, es_vertical, tablero = 10):
     '''
@@ -69,20 +86,6 @@ def colocar_barco (eslora,tablero = 10):
 
     return barco_colocado
 
-'''
-########## NO NOS HACE FALTA ESTA FUNCIÓN ##############
-def crear_todos_los_barcos (lista_barcos_eslora):
-    todos_los_barcos = []
-
-    for num_barcos, eslora in lista_barcos_eslora:
-        for _ in range(num_barcos):
-            barco = colocar_barco(eslora)
-            todos_los_barcos.append(barco)
-    
-    return todos_los_barcos
-########## NO NOS HACE FALTA ESTA FUNCIÓN ##############
-'''
-
 def colisiona(barco_actual, otros_barcos):
     '''
     función que comprueba si un barco colisiona con los barcos existentes 
@@ -117,16 +120,6 @@ def dibujar_tablero_con_barcos(tablero_barcos, barcos):
         tablero_barcos = dibujar_barco(barco, tablero_barcos)
     return tablero_barcos
 
-'''
-########## NO NOS HACE FALTA ESTA FUNCIÓN ##############
-def disparar(casilla,tablero):
-    if tablero[casilla] in ('O', 'X'):
-        tablero[casilla] = "X"
-    elif tablero[casilla] in ("_", 'A'):
-        tablero[casilla] = "A"
-    return tablero
-########## NO NOS HACE FALTA ESTA FUNCIÓN ##############
-'''
 def actualizar_impactos(disparo, barcos_jugador, barcos_impactados):
     #disparo es un array de [x,y], barcos es un array de [[[x,y],[w,z]],...]
     for i, barco in enumerate(barcos_jugador): # para cada barco del jugador
@@ -139,10 +132,22 @@ def actualizar_impactos(disparo, barcos_jugador, barcos_impactados):
 def comprobar_hundido_y_ganador(barcos_jugador, barcos_impactados):
     todos_hundidos = True
     for i in range(len(barcos_jugador)): # para cada barco del jugador
-        if len(barcos_jugador[i]) == len(barcos_impactados[i]): # comprobar si coincide con los impactados
-            print("💥💥Hundido!💥💥") # si hay alguno
+        barco = barcos_jugador[i]
+        impactos = barcos_impactados[i]
+
+        if "_hundido" in impactos: # si ya está marcado como hundido, pasamos del barco
+            continue
+        
+        if all(tuple(pos) in map(tuple,impactos) for pos in barco): # comprobamos que todas las casillas del barco estén impactadas
+            print("\033[36m■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\033[0m")
+            print("\033[36m■■■■■■■■■■■ H U N D I D O ■■■■■■■■■■■\033[0m") # si hay alguno
+            print("\033[36m■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\033[0m")
+            time.sleep(2)  # espera 2 segundos antes de continuar para que el usuario vea el mensaje
+            impactos.append("_hundido") # añadimos el marcador
+
         else:
-            todos_hundidos = False # si algún barco no está en barcos_impactados, 
+            todos_hundidos = False # si el barco no está aún hundido 
+
     return todos_hundidos
 
 def disparar(
@@ -178,12 +183,59 @@ def disparar(
         tablero_barcos_rival[fila][columna] = "X"  # Tocado o ya disparado
         tablero_disparos_jugador[fila][columna] = "X"
         tocado = True
+        
         # actualizar barcos_impactados
         barcos_impactados = actualizar_impactos(disparo, barcos_jugador, barcos_impactados)
-        comprobar_hundido_y_ganador(barcos_jugador, barcos_impactados)
+        
     elif coordenadas in ("_", 'A'):
         tablero_barcos_rival[fila][columna] = "A"  # Agua o ya fallado
         tablero_disparos_jugador[fila][columna] = "A"
         tocado = False
+
+    ganador = comprobar_hundido_y_ganador(barcos_jugador, barcos_impactados)
+
+    return tocado, barcos_impactados, ganador
+
+# Función para disparo aleatorio del rival
+def disparo_aleatorio(tablero, barcos_jugador, barcos_impactados, disparos_posibles):
+    if not disparos_posibles:
+        print("El rival se ha quedado sin disparos posibles.")
+        return False, False # para cuando no queden disparos posibles (y no entre en bucle infinito)
+
+    while True:
+        fila, columna = disparos_posibles.pop()  # Usamos y eliminamos la siguiente posición
         
-    return tocado, barcos_impactados
+        disparo = [fila, columna]
+        
+        # Si es un barco (O), se marca como tocado (X)
+        if tablero[fila][columna] == 'O':
+            tablero[fila][columna] = 'X'
+            barcos_impactados = actualizar_impactos(disparo, barcos_jugador, barcos_impactados)
+            ganador = comprobar_hundido_y_ganador(barcos_jugador, barcos_impactados)
+            return True, ganador
+        else:  # Si es agua (_), se marca como fallado (A)
+            tablero[fila][columna] = 'A'
+            return False, False
+        
+# Para el MODO DEMO: Función para disparos guiados del rival
+def disparo_demo(tablero, barcos_jugador, barcos_impactados, disparos_posibles):
+    if not disparos_posibles:
+        print("El rival se ha quedado sin disparos posibles.")
+        return False, False # para cuando no queden disparos posibles (y no entre en bucle infinito)
+
+    fila, columna = disparos_posibles.pop(0)
+    disparo = [fila, columna]
+
+    if tablero[fila][columna] == 'O':
+        tablero[fila][columna] = 'X'
+        barcos_impactados = actualizar_impactos(disparo, barcos_jugador, barcos_impactados)
+        # 4. Mostrar los tableros de BARCOS del Jugador y del Rival
+        print("TABLERO BARCOS JUGADOR")
+        print(tablero)
+        pensando(1)
+        ganador = comprobar_hundido_y_ganador(barcos_jugador, barcos_impactados)
+        return True, ganador
+    else:
+        tablero[fila][columna] = 'A'
+        return False, False
+
