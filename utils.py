@@ -9,11 +9,11 @@ def limpiar_pantalla():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def pensando(segundos):
-    print("...", end='', flush=True)
-    time.sleep(segundos/3)
     print(".", end='', flush=True)
     time.sleep(segundos/3)
-    print(".")
+    print("..", end='', flush=True)
+    time.sleep(segundos/3)
+    print("...")
     time.sleep(segundos/3)
 
 def dibujar():
@@ -238,4 +238,3 @@ def disparo_demo(tablero, barcos_jugador, barcos_impactados, disparos_posibles):
     else:
         tablero[fila][columna] = 'A'
         return False, False
-
