@@ -20,13 +20,13 @@ Para activar el modo demostración:
 Ideal para presentaciones o correcciones sin necesidad de jugar la partida completa.
 
 ## Estructura del proyecto
-
+```
 Hundir la flota/
-├── main.py
-├── utils.py
-├── variables.py
+├── main.py         # script principal para la ejecución del juego
+├── utils.py        # lógica del juego (funciones)
+├── variables.py    # variables que utiliza el programa
 └── README.md
-
+```
 ## Requisitos
 
 - Python 3.x
