@@ -126,13 +126,6 @@ while jugando:
                 barcos_impactados_por_rival,
                 disparos_posibles_rival
             )
-            
-            '''# 4. Mostrar los tableros de BARCOS del Jugador y del Rival
-            print("TABLERO BARCOS JUGADOR")
-            print(tablero_barcos_jugador)
-            print("TABLERO BARCOS RIVAL")
-            print(tablero_barcos_rival)
-            pensando(2)'''
         else:
             tocado, ganador = disparo_aleatorio(
                 tablero_barcos_jugador,

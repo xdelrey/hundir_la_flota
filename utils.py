@@ -151,7 +151,7 @@ def comprobar_hundido_y_ganador(barcos_jugador, barcos_impactados):
     return todos_hundidos
 
 def disparar(
-        barcos_jugador,
+        barcos_objetivo,
         barcos_impactados, 
         tablero_barcos_rival, 
         tablero_disparos_jugador):
@@ -185,14 +185,14 @@ def disparar(
         tocado = True
         
         # actualizar barcos_impactados
-        barcos_impactados = actualizar_impactos(disparo, barcos_jugador, barcos_impactados)
+        barcos_impactados = actualizar_impactos(disparo, barcos_objetivo, barcos_impactados)
         
     elif coordenadas in ("_", 'A'):
         tablero_barcos_rival[fila][columna] = "A"  # Agua o ya fallado
         tablero_disparos_jugador[fila][columna] = "A"
         tocado = False
 
-    ganador = comprobar_hundido_y_ganador(barcos_jugador, barcos_impactados)
+    ganador = comprobar_hundido_y_ganador(barcos_objetivo, barcos_impactados)
 
     return tocado, barcos_impactados, ganador
 
