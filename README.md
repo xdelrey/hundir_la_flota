@@ -19,6 +19,14 @@ Para activar el modo demostración:
 
 Ideal para presentaciones o correcciones sin necesidad de jugar la partida completa.
 
+## Estructura del proyecto
+
+Hundir la flota/
+├── main.py
+├── utils.py
+├── variables.py
+└── README.md
+
 ## Requisitos
 
 - Python 3.x
