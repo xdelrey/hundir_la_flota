@@ -13,7 +13,7 @@ Proyecto en Python inspirado en el clásico juego de **Hundir la Flota** (*Battl
 
 Para activar el modo demostración:
 
-- Establece `modo_demo = True` en `main.py`.
+- Selecciona el Modo Demo o Modo Normal en el inicio.
 - El jugador tendrá solo 2 barcos pequeños.
 - El rival usará disparos dirigidos a posiciones fijas para ganar rápidamente.
 
