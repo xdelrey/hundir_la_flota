@@ -1,15 +1,18 @@
-# IMPORTAMOS LO NECESARIO
+# IMPORTAMOS LO NECESARIO ---------------------------------------------
 from utils import *
 import variables as vr
 import time
 import random
-import copy 
+import copy
 
-# Activación del Modo Demo
+
+# ACTIVACIÓN MODO DEMO ----------------------------------------------------
 modo_demo = True
 modo_demo = input("En qué MODO jugamos? Enter para REAL. Cualquier tecla para DEMO.")
 
-# CREAMOS TABLEROS VACÍOS
+
+
+# CREAMOS TABLEROS VACÍOS ----------------------------------------------------
 #Tablero 1 Jugador (barcos Jugador con disparos Rival)
 tablero_barcos_jugador = crear_tablero()
 
@@ -24,7 +27,7 @@ tablero_disparos_rival = crear_tablero()
 
 
 
-# INICIALIZAMOS JUEGO
+# INICIALIZAMOS JUEGO ----------------------------------------------------
 
 # Inicializar los barcos del Jugador en Tablero 1 Jugador (barcos Jugador con disparos Rival)
 if modo_demo:
@@ -51,13 +54,16 @@ barcos_impactados_por_rival = [[] for _ in barcos_jugador]
 
 
 
-# JUGAMOS
 
-# 1. QUIÉN EMPIEZA? DE MOMENTO, EMPIEZA SIEMPRE EL JUGADOR
+# JUGAMOS ----------------------------------------------------------------------------------
+
+
+# 1. QUIÉN EMPIEZA? DE MOMENTO, EMPIEZA SIEMPRE EL JUGADOR ---------------------------------
 jugando = True
-turno_jugador = True # de momento, siempre empieza el jugador ⌛⌛⌛⌛⌛
+turno_jugador = True # de momento, siempre empieza el jugador ⌛
 
-# DISPAROS POSIBLES: ALEATORIO O A POSICIONES FIJAS EN MODO DEMO
+
+# DISPAROS POSIBLES: ALEATORIO O A POSICIONES FIJAS EN MODO DEMO --------------------------
 if modo_demo:
     disparos_posibles_rival = [
         [1, 1], [1, 2], [4, 5], [5, 5]  # para que hundan los barcos de posiciones conocidas
@@ -71,11 +77,12 @@ else:
     # ya que las sacamos una a una de esta lista.
     random.shuffle(disparos_posibles_rival)
 
-# 2. MIENTRAS NO HAYA UN GANADOR, EL JUEGO CONTINUA ⌛⌛⌛⌛⌛
+
+# 2. MIENTRAS NO HAYA UN GANADOR, EL JUEGO CONTINUA ---------------------------------------
 while jugando:
 
     if turno_jugador:
-        # 3. TURNO DEL JUGADOR
+        # 3. TURNO DEL JUGADOR --------------------------------------   
         limpiar_pantalla()
         print("\n ▓▓▓▓▓▓▓▓▓▓▓▓ TURNO DEL JUGADOR ▓▓▓▓▓▓▓▓▓▓▓▓\n")
 
@@ -87,6 +94,7 @@ while jugando:
         print("TABLERO BARCOS RIVAL (como pista ;-) ")
         print(tablero_barcos_rival, "\n")
         print("\n ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓\n")
+        
         #   4.. DISPARAR Y COMPROBAR SI EL DISPARO ES AGUA O TOCADO, Y SI SE HA HUNDIDO UN BARCO
         tocado, barcos_impactados_por_jugador, ganador = disparar(
             barcos_rival,
@@ -113,7 +121,7 @@ while jugando:
         turno_jugador = False  # Cambiar turno a Rival
 
     else:
-        # 3. TURNO DEL RIVAL
+        # 3. TURNO DEL RIVAL --------------------------------------
         limpiar_pantalla()
         print("\n ░░░░░░░░░░░ TURNO DEL RIVAL ░░░░░░░░░░░\n")
         pensando(2)
