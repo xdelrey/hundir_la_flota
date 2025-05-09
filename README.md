@@ -1,2 +1,30 @@
-# hundir_la_flota
-Juego Hundir la Flota. Ejercicio de Python.
+# Hundir la Flota en Python ⚓️
+
+Proyecto en Python inspirado en el clásico juego de **Hundir la Flota** (*Battleship*), creado como ejercicio para practicar lógica, estructuras de datos y control de flujo.
+
+## Características principales
+
+- 🎯 Juego por turnos: jugador vs. máquina.
+- 📋 Tableros separados para barcos y disparos.
+- 💥 Impactos, hundimientos y detección de ganador.
+- 🧪 **Modo demo** para demostrar fácilmente que la máquina puede ganar.
+
+## Modo Demo
+
+Para activar el modo demostración:
+
+- Establece `modo_demo = True` en `main.py`.
+- El jugador tendrá solo 2 barcos pequeños.
+- El rival usará disparos dirigidos a posiciones fijas para ganar rápidamente.
+
+Ideal para presentaciones o correcciones sin necesidad de jugar la partida completa.
+
+## Requisitos
+
+- Python 3.x
+- Numpy (`pip install numpy`)
+
+## Cómo ejecutar
+
+```bash
+python main.py
