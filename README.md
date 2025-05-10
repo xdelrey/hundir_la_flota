@@ -36,3 +36,7 @@ Hundir la flota/
 
 ```bash
 python main.py
+```
+
+
+_* Este código ha sido desarrollado por xdelrey en 2025. Mantén la atribución correspondiente si reutilizas este código._
